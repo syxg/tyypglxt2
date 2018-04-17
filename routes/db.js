@@ -5,20 +5,4 @@ var connection = mysql.createConnection({
   password : 'admin',
   database : 'test'
 });
- 
-connection.connect();
- 
-var  sql = 'SELECT * FROM stu';
-//查
-connection.query(sql,function (err, result) {
-        if(err){
-          console.log('[SELECT ERROR] - ',err.message);
-          return;
-        }
- 
-       console.log('--------------------------SELECT----------------------------');
-       console.log(result);
-       console.log('------------------------------------------------------------\n\n');  
-});
- 
-connection.end();
+module.exports=connection;
