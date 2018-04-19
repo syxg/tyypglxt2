@@ -1,5 +1,6 @@
 var express = require('express');
 var connection = require('./db');
+var crypto=require("crypto");
 var router = express.Router();
 connection.connect();
 /* GET home page. */
