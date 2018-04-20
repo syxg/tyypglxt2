@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<form action="/AdminLoginAndRegHandler?action=login" method="post">
+			<p>用户名：<input type="text" name="id"/></p>
+			<p>密码：<input type="text" name="password"/></p>
+			<p>验证码：<input type="text" name="btn"/ value="点击获取验证码" id="btn"></p>
+			<input type="submit" value="登录" />
+		</form>
+		<a href="/VueHandler/AdminHandler?action=quit">退出</a>
+		<form action="/VueHandler/AdminLoginAndRegHandler?action=returnuserinfo" method="post">
+			
+			<input type="submit" value="获取用户信息"/>
+		</form>
+		<form action="/VueHandler/AdminHandler?action=updatepass" method="post">
+			<p>旧密码<input type="text" name="userPwd" value="" /></p>
+			<p>新密码<input type="text" name="newPwd" value="" /></p>
+			<input type="submit" value="修改密码"/>
+		</form>
+	</body>
+		<script type="text/javascript">
+	    function ajax(opt) {
+        opt = opt || {};
+        opt.method = opt.method.toUpperCase() || 'POST';
+        opt.url = opt.url || '';
+        opt.async = opt.async || true;
+        opt.data = opt.data || null;
+        opt.success = opt.success || function () {};
+        var xmlHttp = null;
+        if (XMLHttpRequest) {
+            xmlHttp = new XMLHttpRequest();
+        }
+        else {
+            xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+        }var params = [];
+        for (var key in opt.data){
+            params.push(key + '=' + opt.data[key]);
+        }
+        var postData = params.join('&');
+        if (opt.method.toUpperCase() === 'POST') {
+            xmlHttp.open(opt.method, opt.url, opt.async);
+            xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
+            xmlHttp.send(postData);
+        }
+        else if (opt.method.toUpperCase() === 'GET') {
+            xmlHttp.open(opt.method, opt.url + '?' + postData, opt.async);
+            xmlHttp.send(null);
+        } 
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                opt.success(xmlHttp.responseText);
+            }
+        };
+    }
+		var refresh=function(){
+			ajax({
+			    method: 'get',
+			    url: 'http://localhost:3000/VueHandler/AdminLoginAndRegHandler',
+			    data: {
+			        action: 'verification'
+			    },
+			    success: function (response) {
+//			    	document.getElementById("hidden").style.display="block";
+			       document.getElementById("btn").value=JSON.parse(response).data;
+			    }
+			});
+			
+		}
+		document.getElementById("btn").onclick=refresh;
+		refresh();
+	</script>
+</html>
