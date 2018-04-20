@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			form{
+				margin: 0  0 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<form action="/AdminLoginAndRegHandler?action=register" method="post">
+			<p>id<input type="text" name="id" /> </p>
+			<p>手机号：<input type="text" name="phone" /> </p>
+            <p>姓名：<input type="text" name="name" /> </p>
+            <p>email<input type="text" name="email" /> </p>
+			<p>密码：<input type="text" name="password" /> </p>
+			<p>sex<select name="sex">
+                <option value="1">男</option>
+				<option value="0">女</option>
+			</select> </p>
+			<input type="submit" value="添加管理员"/>
+		</form>
+		<form action="/VueHandler/AdminHandler?action=adduser" method="post">
+			<p>用户名：<input type="text" name="username" /> </p>
+			<p>手机号：<input type="text" name="phone" /> </p>
+			<p>email：<input type="text" name="email" /> </p>
+			<input type="submit" value="添加学员"/>
+		</form>
+		<form action="/VueHandler/AdminHandler?action=update" method="post">
+			<p>编号：<input type="text" name="tokenId"/></p>
+			<p>手机号：<input type="text" name="phone" /> </p>
+			<p>姓名：<input type="text" name="turename" /> </p>
+			<p>权限：<select name="powerCode">
+				<option value="1">系统管理员</option>
+				<option value="2">课程管理员</option>
+			</select> </p>
+			<input type="submit" value="修改管理员"/>
+		</form>
+		<form action="/VueHandler/AdminHandler" method="get">
+			<input type="hidden" name="action" value="delete" />
+			<p>编号：<input type="text" name="tokenId"/></p>
+			<input type="submit" value="删除"/>
+		</form>
+		<form action="/VueHandler/AdminHandler" method="get">
+			<input type="hidden" name="action" value="lockuser" />
+			<p>编号：<input type="text" name="tokenId"/></p>
+			<input type="submit" value="冻结/解冻账号"/>
+		</form>
+		<form action="/VueHandler/AdminHandler" method="get">
+			<input type="hidden" name="action" value="show" />
+			<p>姓名：<input type="text" name="searchText"/></p>
+			<p>页号：<input type="text" name="pageStart"/></p>
+			<input type="submit" value="查询管理员"/>
+		</form>
+		<form action="/VueHandler/AdminHandler?action=usershow" method="post">
+			<p>用户名：<input type="text" name="username" /> </p>
+			<p>手机号：<input type="text" name="phone" /> </p>
+			<p>email：<input type="text" name="email" /> </p>
+			<p>页号：<input type="text" name="pageStart"/></p>
+			<input type="submit" value="查询学员"/>
+		</form>
+		<form action="/VueHandler/AdminLoginAndRegHandler?action=verification" method="get">
+			<input type="hidden" name="action" value="verification" />
+			<input type="submit" value="获取验证码"/>
+		</form>
+		<p><input type="button" id="ajax1" value="获取验证码" /><input type="text" name="ajax" id="ajax" value="ajax" /></p>
+		<form action="/VueHandler/AdminLoginAndRegHandler?action=checkVerification" method="get">
+			<input type="hidden" name="action" value="checkVerification" />
+			<input type="text" name="veri" value="" />
+			<input type="submit" value="校验验证码"/>
+		</form>
+		<form action="/VueHandler/UpLoadVideoHandler" method="post" enctype="multipart/form-data">
+			<p>上传的文件：<input type="file" name="data" id="" value="" /></p>
+			<p>上传的文件：<input type="file" name="" id="" value="" /></p>
+			<p>字段1：<input type="text" name="fields1" id="" value="" /></p>
+			<p>字段2：<input type="text" name="fields2" id="" value="" /></p>
+			<input type="submit" value="提交"/>
+		</form>
+	</body>
+	<script type="text/javascript">
+	    function ajax(opt) {
+        opt = opt || {};
+        opt.method = opt.method.toUpperCase() || 'POST';
+        opt.url = opt.url || '';
+        opt.async = opt.async || true;
+        opt.data = opt.data || null;
+        opt.success = opt.success || function () {};
+        var xmlHttp = null;
+        if (XMLHttpRequest) {
+            xmlHttp = new XMLHttpRequest();
+        }
+        else {
+            xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+        }var params = [];
+        for (var key in opt.data){
+            params.push(key + '=' + opt.data[key]);
+        }
+        var postData = params.join('&');
+        if (opt.method.toUpperCase() === 'POST') {
+            xmlHttp.open(opt.method, opt.url, opt.async);
+            xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
+            xmlHttp.send(postData);
+        }
+        else if (opt.method.toUpperCase() === 'GET') {
+            xmlHttp.open(opt.method, opt.url + '?' + postData, opt.async);
+            xmlHttp.send(null);
+        } 
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                opt.success(xmlHttp.responseText);
+            }
+        };
+    }
+		document.getElementById("ajax1").onclick=function(){
+			ajax({
+			    method: 'get',
+			    url: 'http://localhost:3000/VueHandler/AdminLoginAndRegHandler',
+			    data: {
+			        action: 'verification'
+			    },
+			    success: function (response) {
+			       document.getElementById("ajax").value=JSON.parse(response).data;
+			    }
+			});
+			
+		}
+	</script>
+</html>
