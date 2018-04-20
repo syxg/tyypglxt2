@@ -49,8 +49,7 @@ router.post('/AdminLoginAndRegHandler', function (req, res, next) {
           res.send({ err: "登录失败:" + err.message });
           return;
         }
-        console.log(result[0].V) ;
-        if (result[0].V == 1) {
+        if (result[0].v == 1) {
           res.send({ success: "登录成功" });
         } else {
           res.send({ err: "登录失败" });
